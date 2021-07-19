@@ -22,7 +22,7 @@ export default class SearchBar extends Component {
   handleFormSubmit = (e) => {
     e.preventDefault();
 
-    if (this.state.searchName.trim() === " ") {
+    if (this.state.searchName.trim() === "") {
       return toast.error("Enter correct request!");
     }
     this.props.onSubmit(this.state.searchName);
