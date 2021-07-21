@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { ToastContainer } from "react-toastify";
-import Loader from "react-loader-spinner";
+// import Loader from "react-loader-spinner";
 import "react-toastify/dist/ReactToastify.css";
 import api from "./services/apiService";
 import SearchBar from "./components/Searchbar/Searchbar";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import Button from "./components/Button/Button";
+import Modal from "./components/Modal/Modal";
+import Loader from "./components/Loader/Loader";
 
 class App extends Component {
   state = {
@@ -14,16 +16,15 @@ class App extends Component {
     page: 1,
     loader: false,
     error: null,
+    showModal: false,
+    modalImg: "",
   };
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchName !== this.state.searchName) {
       this.fetchSearch();
     }
   }
-
-  // onChangePage = (search) => {
-  //   this.setState({ searchName: search, page: 1, images: [] });
-  // };
 
   formSubmit = (searchName) => {
     this.setState({ searchName: searchName, page: 1, images: [] });
@@ -53,13 +54,27 @@ class App extends Component {
       .finally(() => this.setState({ loader: false }));
   };
 
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
+  onImgClick = (e) => {
+    if (e.target.nodeName !== "IMG") {
+      return;
+    }
+    this.setState({
+      modalImg: e.target.dataset.img,
+    });
+    this.toggleModal();
+  };
+
   render() {
-    const { images, loader } = this.state;
+    const { images, loader, showModal, modalImg } = this.state;
     return (
       <div>
-        {loader && (
-          <Loader type="ThreeDots" color="#00BFFF" height={80} width={80} />
-        )}
+        {loader && <Loader />}
         {this.state.error && <p>{this.state.error.message}</p>}
 
         <ToastContainer
@@ -70,9 +85,10 @@ class App extends Component {
           rtl={false}
         />
         <SearchBar onSubmit={this.formSubmit} />
-        <ImageGallery images={images} />
+        <ImageGallery images={images} onImgClick={this.onImgClick} />
 
         {images.length > 0 && !loader && <Button onClick={this.fetchSearch} />}
+        {showModal && <Modal modalImg={modalImg} onClose={this.toggleModal} />}
       </div>
     );
   }

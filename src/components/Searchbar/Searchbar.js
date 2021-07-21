@@ -1,19 +1,11 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 
 export default class SearchBar extends Component {
   state = {
     searchName: "",
   };
-
-  // componentDidMount() {
-  // this.setState({ loader: true });
-
-  //  fetch('https://pixabay.com/api/?q=sea&page=1&key=21902781-05f70a6abac1a4120ac7c9ed1&image_type=photo&orientation=horizontal&per_page=12')
-  //  .then(response => response.json())
-  //  .then(({ hits }) => this.setState({ hits }))
-  //  .finally(() => this.setState({ loader: false }))
-  // }
 
   handleSearchChange = (e) => {
     this.setState({ searchName: e.currentTarget.value.toLowerCase() });
@@ -60,3 +52,7 @@ export default class SearchBar extends Component {
     );
   }
 }
+
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
