@@ -2,7 +2,6 @@ import React, { Component } from "react";
 // import Loader from "react-loader-spinner";
 
 import ImageGalleryItem from "../ImageGalleryItem/ImageGalleryItem";
-// import Button from "../Button/Button";
 
 const ImageGallery = ({ images }) => (
   <ul className="ImageGallery">

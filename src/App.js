@@ -17,30 +17,32 @@ class App extends Component {
   };
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchName !== this.state.searchName) {
-      // this.setState({ loader: true, images: null })
       this.fetchSearch();
     }
   }
 
-  onChangePage = (search) => {
-    this.setState({ searchName: search, page: 1, images: [] });
-  };
+  // onChangePage = (search) => {
+  //   this.setState({ searchName: search, page: 1, images: [] });
+  // };
 
   formSubmit = (searchName) => {
-    this.setState({ searchName });
+    this.setState({ searchName: searchName, page: 1, images: [] });
   };
 
   fetchSearch = () => {
-    const { searchName, page } = this.state;
+    const { searchName, page, images } = this.state;
     this.setState({ loader: true });
+
     api
       .fetchSearch(searchName, page)
-      .then((hits) => {
+      .then((res) => {
+        const { hits } = res;
+
         this.setState((prevState) => ({
           images: [...prevState.images, ...hits],
           page: prevState.page + 1,
         }));
-        if (this.state.images.length > 12) {
+        if (images.length > 12) {
           window.scrollTo({
             top: document.documentElement.scrollHeight,
             behavior: "smooth",
@@ -70,7 +72,7 @@ class App extends Component {
         <SearchBar onSubmit={this.formSubmit} />
         <ImageGallery images={images} />
 
-        {images.length > 0 && <Button onClick={this.fetchSearch} />}
+        {images.length > 0 && !loader && <Button onClick={this.fetchSearch} />}
       </div>
     );
   }

@@ -1,9 +1,13 @@
 import React from "react";
 
 const Button = ({ onClick }) => {
-  <button type="button" onClick={onClick}>
-    Load more
-  </button>;
+  return (
+    <div className="Absolute-Center ">
+      <button type="button" className="Button" onClick={onClick}>
+        Load more
+      </button>
+    </div>
+  );
 };
 
 export default Button;
